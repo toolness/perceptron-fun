@@ -16,6 +16,7 @@ impl Perceptron {
 
     pub fn update(&mut self) -> i32 {
         let mut incorrect = 0;
+        // This is based on "Why Machines Learn" by Anil Ananthaswamy, pg. 51.
         for point in &self.datapoints {
             let x = Vec3(1.0, point.0 .0 as f64, point.0 .1 as f64);
             let y = point.1 as f64;
