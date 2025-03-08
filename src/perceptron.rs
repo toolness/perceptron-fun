@@ -58,9 +58,12 @@ impl Perceptron {
             DARKBLUE,
         );
 
-        // Draw weights (as line)
+        // Draw weights, as a line dividing the space in half.
         if self.weights.2 != 0.0 {
             let f = |x: f32| -> f32 {
+                // Derived by solving for `y` with `0 = w1 * x + w2 * y + w0`, since
+                // the line is defined as all (x, y) such that the weighted sum with
+                // bias is zero.
                 ((-self.weights.0 - self.weights.1 * x as f64) / self.weights.2) as f32
             };
             let x1 = -1000.0;
