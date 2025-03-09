@@ -26,7 +26,7 @@ pub struct Perceptron {
     updates_this_generation: usize,
     /// Whether or not the Perceptron has gone through an entire
     /// generation without needing to update its weights.
-    has_converged: bool
+    has_converged: bool,
 }
 
 impl Perceptron {
@@ -37,7 +37,7 @@ impl Perceptron {
             curr_index: 0,
             updates_this_generation: 0,
             last_update_index: None,
-            has_converged: false
+            has_converged: false,
         }
     }
 
@@ -55,7 +55,7 @@ impl Perceptron {
         loop {
             match self.datapoints.get(self.curr_index) {
                 Some(point) => {
-                    let x = Vec3(1.0, point.pos .0 as f64, point.pos .1 as f64);
+                    let x = Vec3(1.0, point.pos.0 as f64, point.pos.1 as f64);
                     let y = point.label as f64;
                     let w_dot_x = self.weights.dot(&x);
                     if y * w_dot_x <= 0.0 {
@@ -66,7 +66,7 @@ impl Perceptron {
                         return;
                     }
                     self.curr_index += 1;
-                },
+                }
                 None => {
                     if self.updates_this_generation == 0 {
                         self.has_converged = true;
@@ -102,8 +102,8 @@ impl Perceptron {
         // Draw datapoints.
         for (index, point) in self.datapoints.iter().enumerate() {
             plot.draw_circle(
-                point.pos .0 as f32,
-                point.pos .1 as f32,
+                point.pos.0 as f32,
+                point.pos.1 as f32,
                 0.5,
                 self.get_point_color(point, index),
             );
@@ -121,22 +121,16 @@ impl Perceptron {
         let line = get_weight_line(&self.weights);
 
         if let Some((x1, y1, x2, y2)) = line {
-            plot.draw_line(
-                x1,
-                y1,
-                x2,
-                y2,
-                BLUE,
-            );
+            plot.draw_line(x1, y1, x2, y2, BLUE);
         }
     }
 }
 
 /// Returns the geometric representation the given weights
 /// as a line with coordinates (x1, y1, x2, y2).
-/// 
+///
 /// If the weights don't represent a vector, returns None.
-/// 
+///
 /// Technically, this is actually the line *perpendicular*
 /// to the weight vector, but conceptually it's the line
 /// that divides the space in half.

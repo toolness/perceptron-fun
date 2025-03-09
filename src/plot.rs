@@ -7,7 +7,10 @@ pub struct Plot {
 
 impl Plot {
     pub fn new(scale: f32) -> Self {
-        Plot { scale, origin: (screen_width() / 2.0, screen_height() / 2.0) }
+        Plot {
+            scale,
+            origin: (screen_width() / 2.0, screen_height() / 2.0),
+        }
     }
 
     pub fn screen_x(&self, x: f32) -> f32 {
@@ -19,8 +22,22 @@ impl Plot {
     }
 
     pub fn draw_axes(&self) {
-        draw_line(0.0, self.origin.1, screen_width(), self.origin.1, 1.0, DARKGRAY);
-        draw_line(self.origin.0, 0.0, self.origin.0, screen_height(), 1.0, DARKGRAY);
+        draw_line(
+            0.0,
+            self.origin.1,
+            screen_width(),
+            self.origin.1,
+            1.0,
+            DARKGRAY,
+        );
+        draw_line(
+            self.origin.0,
+            0.0,
+            self.origin.0,
+            screen_height(),
+            1.0,
+            DARKGRAY,
+        );
     }
 
     pub fn draw_line(&self, x1: f32, y1: f32, x2: f32, y2: f32, color: Color) {
@@ -30,7 +47,7 @@ impl Plot {
             self.screen_x(x2),
             self.screen_y(y2),
             1.0,
-            color
+            color,
         );
     }
 

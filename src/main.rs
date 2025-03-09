@@ -4,19 +4,17 @@ use perceptron::{Datapoint, Perceptron};
 use plot::Plot;
 
 mod perceptron;
-mod vec3;
 mod plot;
+mod vec3;
 
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
-    let mut perceptron = Perceptron::new(
-        vec![
-            Datapoint::new((3, 1), -1),
-            Datapoint::new((2, -1), 1),
-            Datapoint::new((-2, 1), 1),
-            Datapoint::new((-1, -3), -1),
-        ]
-    );
+    let mut perceptron = Perceptron::new(vec![
+        Datapoint::new((3, 1), -1),
+        Datapoint::new((2, -1), 1),
+        Datapoint::new((-2, 1), 1),
+        Datapoint::new((-1, -3), -1),
+    ]);
 
     const SCALE: f32 = 8.0;
 
