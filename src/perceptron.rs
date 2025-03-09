@@ -3,9 +3,10 @@ use crate::plot::Plot;
 use super::vec3::Vec3;
 use macroquad::prelude::*;
 
+#[derive(Clone, Copy)]
 pub struct Datapoint {
-    pos: (i32, i32),
-    label: i32,
+    pub pos: (i32, i32),
+    pub label: i32,
 }
 
 impl Datapoint {
