@@ -13,11 +13,11 @@ impl Plot {
         }
     }
 
-    pub fn screen_x(&self, x: f32) -> f32 {
+    fn screen_x(&self, x: f32) -> f32 {
         self.origin.0 + x * self.scale
     }
 
-    pub fn screen_y(&self, y: f32) -> f32 {
+    fn screen_y(&self, y: f32) -> f32 {
         self.origin.1 + y * self.scale
     }
 
