@@ -1,7 +1,16 @@
 use super::vec3::Vec3;
 use macroquad::prelude::*;
 
-pub struct Datapoint(pub (i32, i32), pub i32);
+pub struct Datapoint {
+    pub pos: (i32, i32),
+    pub label: i32,
+}
+
+impl Datapoint {
+    pub fn new(pos: (i32, i32), label: i32) -> Self {
+        Datapoint { pos, label }
+    }
+}
 
 #[derive(Default)]
 pub struct Perceptron {
@@ -18,8 +27,8 @@ impl Perceptron {
         let mut incorrect = 0;
         // This is based on "Why Machines Learn" by Anil Ananthaswamy, pg. 51.
         for point in &self.datapoints {
-            let x = Vec3(1.0, point.0 .0 as f64, point.0 .1 as f64);
-            let y = point.1 as f64;
+            let x = Vec3(1.0, point.pos .0 as f64, point.pos .1 as f64);
+            let y = point.label as f64;
             let w_dot_x = self.weights.dot(&x);
             if y * w_dot_x <= 0.0 {
                 incorrect += 1;
@@ -44,10 +53,10 @@ impl Perceptron {
         // Draw points
         for point in &self.datapoints {
             draw_circle(
-                screen_x(point.0 .0 as f32),
-                screen_y(point.0 .1 as f32),
+                screen_x(point.pos .0 as f32),
+                screen_y(point.pos .1 as f32),
                 SCALE / 2.0,
-                if point.1 <= 0 { RED } else { GREEN },
+                if point.label <= 0 { RED } else { GREEN },
             );
         }
 

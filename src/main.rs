@@ -8,10 +8,10 @@ mod vec3;
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
     let datapoints: Vec<Datapoint> = vec![
-        Datapoint((3, 1), -1),
-        Datapoint((2, -1), 1),
-        Datapoint((-2, 1), 1),
-        Datapoint((-1, -3), -1),
+        Datapoint::new((3, 1), -1),
+        Datapoint::new((2, -1), 1),
+        Datapoint::new((-2, 1), 1),
+        Datapoint::new((-1, -3), -1),
     ];
     let mut perceptron = Perceptron::default();
     perceptron.set_datapoints(datapoints);
