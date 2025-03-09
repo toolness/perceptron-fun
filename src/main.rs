@@ -16,6 +16,8 @@ async fn main() {
         ]
     );
 
+    const SCALE: f32 = 8.0;
+
     let mut auto_update = false;
 
     loop {
@@ -40,7 +42,7 @@ async fn main() {
         };
         draw_text(status, 0.0, 30.0, 30.0, WHITE);
 
-        perceptron.draw();
+        perceptron.draw(SCALE);
         next_frame().await;
 
         if is_key_pressed(KeyCode::Escape) {

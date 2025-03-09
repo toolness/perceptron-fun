@@ -74,13 +74,12 @@ impl Perceptron {
         }
     }
 
-    pub fn draw(&self) {
-        const SCALE: f32 = 8.0;
+    pub fn draw(&self, scale: f32) {
         let center_x = screen_width() / 2.0;
         let center_y = screen_height() / 2.0;
 
-        let screen_x = |x: f32| -> f32 { center_x + x * SCALE };
-        let screen_y = |y: f32| -> f32 { center_y + y * SCALE };
+        let screen_x = |x: f32| -> f32 { center_x + x * scale };
+        let screen_y = |y: f32| -> f32 { center_y + y * scale };
 
         // Draw axes.
         draw_line(0.0, center_y, screen_width(), center_y, 1.0, DARKGRAY);
@@ -91,7 +90,7 @@ impl Perceptron {
             draw_circle(
                 screen_x(point.pos .0 as f32),
                 screen_y(point.pos .1 as f32),
-                SCALE / 2.0,
+                scale / 2.0,
                 if point.label <= 0 { RED } else { GREEN },
             );
         }
