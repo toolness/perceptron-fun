@@ -43,6 +43,8 @@ impl Perceptron {
 
     /// Try to make a single weight update to the Perceptron based on the
     /// next datapoint that the Perceptron doesn't classify correctly.
+    ///
+    /// Weights won't be updated if the Perceptron's solution has converged.
     pub fn update(&mut self) {
         // This is based on "Why Machines Learn" by Anil Ananthaswamy, pg. 51.
         loop {
