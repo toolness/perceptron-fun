@@ -98,6 +98,10 @@ impl Perceptron {
         }
     }
 
+    pub fn weights(&self) -> &Vec3 {
+        &self.weights
+    }
+
     pub fn draw(&self, plot: &Plot) {
         // Draw datapoints.
         for (index, point) in self.datapoints.iter().enumerate() {
@@ -108,14 +112,6 @@ impl Perceptron {
                 self.get_point_color(point, index),
             );
         }
-
-        draw_text(
-            &format!("Weights: {:?}", self.weights),
-            0.0,
-            screen_height() - 30.0,
-            30.0,
-            DARKBLUE,
-        );
 
         // Draw weights, as a line dividing the space in half.
         let line = get_weight_line(&self.weights);

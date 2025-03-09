@@ -45,6 +45,15 @@ async fn main() {
 
         plot.draw_axes();
         perceptron.draw(&plot);
+
+        draw_text(
+            &format!("Weights: {:?}", perceptron.weights()),
+            0.0,
+            screen_height() - 30.0,
+            30.0,
+            DARKBLUE,
+        );
+
         next_frame().await;
 
         if is_key_pressed(KeyCode::Escape) {
