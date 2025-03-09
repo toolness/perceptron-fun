@@ -15,29 +15,61 @@ impl Datapoint {
 pub struct Perceptron {
     datapoints: Vec<Datapoint>,
     weights: Vec3,
+    /// The current index in `datapoints` that we're looking at next.
+    curr_index: usize,
+    /// How many weight updates have been made in this generation of
+    /// updates. A generation is an iteration through all the datapoints.
+    updates_this_generation: usize,
+    /// Whether or not the Perceptron has gone through an entire
+    /// generation without needing to update its weights.
+    has_converged: bool
 }
 
 impl Perceptron {
     pub fn new(datapoints: Vec<Datapoint>) -> Self {
         Perceptron {
             datapoints,
-            weights: Default::default()
+            weights: Default::default(),
+            curr_index: 0,
+            updates_this_generation: 0,
+            has_converged: false
         }
     }
 
-    pub fn update(&mut self) -> i32 {
-        let mut incorrect = 0;
+    /// Returns whether all future calls to `update` will do nothing.
+    pub fn has_converged(&self) -> bool {
+        self.has_converged
+    }
+
+    /// Try to make a single weight update to the Perceptron based on the
+    /// next datapoint that the Perceptron doesn't classify correctly.
+    pub fn update(&mut self) {
         // This is based on "Why Machines Learn" by Anil Ananthaswamy, pg. 51.
-        for point in &self.datapoints {
-            let x = Vec3(1.0, point.pos .0 as f64, point.pos .1 as f64);
-            let y = point.label as f64;
-            let w_dot_x = self.weights.dot(&x);
-            if y * w_dot_x <= 0.0 {
-                incorrect += 1;
-                self.weights += y * x;
+        loop {
+            match self.datapoints.get(self.curr_index) {
+                Some(point) => {
+                    let x = Vec3(1.0, point.pos .0 as f64, point.pos .1 as f64);
+                    let y = point.label as f64;
+                    let w_dot_x = self.weights.dot(&x);
+                    self.curr_index += 1;
+                    if y * w_dot_x <= 0.0 {
+                        self.weights += y * x;
+                        self.updates_this_generation += 1;
+                        return;
+                    }
+                },
+                None => {
+                    if self.updates_this_generation == 0 {
+                        self.has_converged = true;
+                    } else {
+                        self.updates_this_generation = 0;
+                        self.curr_index = 0;
+                        self.update();
+                    }
+                    return;
+                }
             }
         }
-        incorrect
     }
 
     pub fn draw(&self) {

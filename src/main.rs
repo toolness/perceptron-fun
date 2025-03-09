@@ -9,7 +9,7 @@ mod vec3;
 async fn main() {
     let mut perceptron = Perceptron::new(
         vec![
-            Datapoint::new((3, 1), -1),
+            Datapoint::new((3, 1), 1),
             Datapoint::new((2, -1), 1),
             Datapoint::new((-2, 1), 1),
             Datapoint::new((-1, -3), -1),
@@ -23,7 +23,12 @@ async fn main() {
             perceptron.update();
         }
 
-        draw_text("Press space to update perceptron.", 0.0, 30.0, 30.0, WHITE);
+        let status = if perceptron.has_converged() {
+            "Perceptron has converged."
+        } else {
+            "Press space to update perceptron."
+        };
+        draw_text(status, 0.0, 30.0, 30.0, WHITE);
 
         perceptron.draw();
         next_frame().await;
