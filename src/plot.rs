@@ -18,7 +18,14 @@ impl Plot {
     }
 
     fn screen_y(&self, y: f32) -> f32 {
-        self.origin.1 + y * self.scale
+        self.origin.1 + y * -self.scale
+    }
+
+    pub fn from_screen_point(&self, (x, y): (f32, f32)) -> (f32, f32) {
+        (
+            (x - self.origin.0) / self.scale,
+            (y - self.origin.1) / -self.scale,
+        )
     }
 
     pub fn draw_axes(&self) {

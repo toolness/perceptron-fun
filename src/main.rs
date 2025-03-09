@@ -10,7 +10,7 @@ mod vec3;
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
     let mut perceptron = Perceptron::new(vec![
-        Datapoint::new((3, 1), -1),
+        Datapoint::new((3, 1), 1),
         Datapoint::new((2, -1), 1),
         Datapoint::new((-2, 1), 1),
         Datapoint::new((-1, -3), -1),
@@ -44,6 +44,10 @@ async fn main() {
         draw_text(status, 0.0, 30.0, 30.0, WHITE);
 
         plot.draw_axes();
+
+        let (mouse_x, mouse_y) = plot.from_screen_point(mouse_position());
+        plot.draw_circle(mouse_x.round(), mouse_y.round(), 0.75, DARKGRAY);
+
         perceptron.draw(&plot);
 
         draw_text(
