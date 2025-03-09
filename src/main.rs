@@ -7,6 +7,13 @@ mod perceptron;
 mod plot;
 mod vec3;
 
+/// Each point on the plot is scaled by this many screen pixels.
+const PLOT_SCALE: f32 = 8.0;
+
+/// Time in seconds between perceptron auto-updates (when auto-updating
+/// is enabled).
+const AUTO_UPDATE_TIME: f64 = 0.25;
+
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
     let mut datapoints = vec![
@@ -17,12 +24,16 @@ async fn main() {
     ];
     let mut perceptron = Perceptron::new(datapoints.clone());
 
-    const SCALE: f32 = 8.0;
-
-    let plot = Plot::new(SCALE);
+    let plot = Plot::new(PLOT_SCALE);
     let mut auto_update = false;
+    let mut last_frame_time = get_time();
+    let mut time_to_auto_update = AUTO_UPDATE_TIME;
 
     loop {
+        let now = get_time();
+        let delta_time = now - last_frame_time;
+        last_frame_time = now;
+
         clear_background(BLACK);
 
         let mouse_f32 = plot.from_screen_point(mouse_position());
@@ -47,9 +58,22 @@ async fn main() {
 
         if is_key_pressed(KeyCode::A) {
             auto_update = !auto_update;
+            time_to_auto_update = 0.0;
         }
 
-        if is_key_pressed(KeyCode::Space) || auto_update {
+        let should_update = if auto_update {
+            time_to_auto_update -= delta_time;
+            if time_to_auto_update <= 0.0 {
+                time_to_auto_update = AUTO_UPDATE_TIME;
+                true
+            } else {
+                false
+            }
+        } else {
+            is_key_pressed(KeyCode::Space)
+        };
+
+        if should_update {
             perceptron.update();
         }
 
