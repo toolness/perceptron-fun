@@ -2,8 +2,8 @@ use super::vec3::Vec3;
 use macroquad::prelude::*;
 
 pub struct Datapoint {
-    pub pos: (i32, i32),
-    pub label: i32,
+    pos: (i32, i32),
+    label: i32,
 }
 
 impl Datapoint {
@@ -12,15 +12,17 @@ impl Datapoint {
     }
 }
 
-#[derive(Default)]
 pub struct Perceptron {
     datapoints: Vec<Datapoint>,
     weights: Vec3,
 }
 
 impl Perceptron {
-    pub fn set_datapoints(&mut self, datapoints: Vec<Datapoint>) {
-        self.datapoints = datapoints;
+    pub fn new(datapoints: Vec<Datapoint>) -> Self {
+        Perceptron {
+            datapoints,
+            weights: Default::default()
+        }
     }
 
     pub fn update(&mut self) -> i32 {
