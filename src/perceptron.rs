@@ -105,6 +105,8 @@ impl Perceptron {
         );
 
         // Draw weights, as a line dividing the space in half.
+        let line: Option<(f32, f32, f32, f32)>;
+
         if self.weights.2 != 0.0 {
             let f = |x: f32| -> f32 {
                 // Derived by solving for `y` with `0 = w1 * x + w2 * y + w0`, since
@@ -113,12 +115,27 @@ impl Perceptron {
                 ((-self.weights.0 - self.weights.1 * x as f64) / self.weights.2) as f32
             };
             let x1 = -1000.0;
+            let y1 = f(x1);
             let x2 = 1000.0;
+            let y2 = f(x2);
+            line = Some((x1, y1, x2, y2));
+        } else if self.weights.1 != 0.0 {
+            // Derived similar to the previous case, but since we know `w2` is
+            // zero, we can remove that entire term and solve for `x`.
+            let x = (-self.weights.0 / self.weights.1) as f32;
+            line = Some((x, -1000.0, x, 1000.0))
+        } else {
+            // The weights represent a directionless vector, there's no line
+            // to draw.
+            line = None
+        }
+
+        if let Some((x1, y1, x2, y2)) = line {
             draw_line(
                 screen_x(x1),
-                screen_y(f(x1)),
+                screen_y(y1),
                 screen_x(x2),
-                screen_y(f(x2)),
+                screen_y(y2),
                 1.0,
                 BLUE,
             );
