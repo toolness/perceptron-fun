@@ -26,6 +26,7 @@ A - Toggle auto-update mode
 2 - Paint purple datapoint (at mouse cursor)
 X - Delete datapoint (at mouse cursor)
 C - Clear all datapoints
+W - Reset weights to zero
 "#;
 
 #[macroquad::main("Perceptron Fun")]
@@ -55,21 +56,23 @@ async fn main() {
         let mouse_f32 = plot.from_screen_point(mouse_position());
         let mouse = (mouse_f32.0.round() as i32, mouse_f32.1.round() as i32);
 
-        let modified_datapoints = if is_key_down(KeyCode::Key1) {
+        let did_modify_datapoints = if is_key_down(KeyCode::Key1) {
             modify_datapoint(&mut datapoints, mouse, Some(1))
         } else if is_key_down(KeyCode::Key2) {
             modify_datapoint(&mut datapoints, mouse, Some(-1))
         } else if is_key_down(KeyCode::X) {
             modify_datapoint(&mut datapoints, mouse, None)
-        } else if is_key_down(KeyCode::C) {
+        } else if is_key_pressed(KeyCode::C) {
             datapoints = vec![];
             true
         } else {
             false
         };
 
-        if modified_datapoints {
+        if did_modify_datapoints {
             perceptron = Perceptron::new(datapoints.clone(), perceptron.weights());
+        } else if is_key_pressed(KeyCode::W) {
+            perceptron = Perceptron::new(datapoints.clone(), Default::default());
         }
 
         if is_key_pressed(KeyCode::H) {
