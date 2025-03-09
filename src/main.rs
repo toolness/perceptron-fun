@@ -152,7 +152,7 @@ async fn main() {
                 );
             }
         } else {
-            draw_text("Press 'H' for help.", LEFT_PADDING, 30.0, 30.0, WHITE);
+            draw_text("Press H for help.", LEFT_PADDING, 30.0, 30.0, WHITE);
         }
 
         next_frame().await;
