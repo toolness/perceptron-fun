@@ -13,6 +13,13 @@ The Perceptron is effectively trying to draw a line that separates the green
 dots from the purple ones. It does this by iterating through the dots and
 updating the line whenever it finds a dot that's on the wrong side of it.
 
+When a dot is highlighted, it means that it is the "cause" of an update to the
+line: it's on the wrong side of the line, and the algorithm is changing the
+line to be a little more correct.
+
+The solution has converged when all the dots are on the correct side of the
+line.
+
 https://github.com/user-attachments/assets/1b49ed9b-d010-45ed-9e1f-53379834a50d
 
 ## Quick start
