@@ -82,11 +82,11 @@ impl Perceptron {
         let screen_x = |x: f32| -> f32 { center_x + x * SCALE };
         let screen_y = |y: f32| -> f32 { center_y + y * SCALE };
 
-        // Draw axes
+        // Draw axes.
         draw_line(0.0, center_y, screen_width(), center_y, 1.0, DARKGRAY);
         draw_line(center_x, 0.0, center_x, screen_height(), 1.0, DARKGRAY);
 
-        // Draw points
+        // Draw datapoints.
         for point in &self.datapoints {
             draw_circle(
                 screen_x(point.pos .0 as f32),
