@@ -97,28 +97,26 @@ async fn main() {
             perceptron.update();
         }
 
-        let status = if perceptron.has_converged() {
-            "Perceptron has converged."
-        } else {
-            if auto_update {
-                "Auto-updating perceptron (press 'A' to stop)."
-            } else {
-                "Press space to update perceptron (press 'A' to auto-update)."
-            }
-        };
-        draw_text(status, LEFT_PADDING, 30.0, 30.0, WHITE);
-
         plot.draw_axes();
         plot.draw_circle(mouse.0 as f32, mouse.1 as f32, 0.75, DARKGRAY);
 
         perceptron.draw(&plot);
 
+        let auto_label = if auto_update { "AUTO" } else { "" };
+        let conv_label = if perceptron.has_converged() {
+            "CONVERGENCE"
+        } else {
+            ""
+        };
         draw_text(
-            &format!("Weights: {:?}", perceptron.weights()),
+            &format!(
+                "Weights: {:3?} {auto_label:4} {conv_label:11}",
+                perceptron.weights()
+            ),
             LEFT_PADDING,
             screen_height() - 30.0,
             30.0,
-            DARKBLUE,
+            WHITE,
         );
 
         if show_help {
@@ -126,11 +124,13 @@ async fn main() {
                 draw_text(
                     line,
                     LEFT_PADDING,
-                    90.0 + (index as f32 * 30.0),
+                    30.0 + (index as f32 * 30.0),
                     30.0,
                     WHITE,
                 );
             }
+        } else {
+            draw_text("Press 'H' for help.", LEFT_PADDING, 30.0, 30.0, WHITE);
         }
 
         next_frame().await;
