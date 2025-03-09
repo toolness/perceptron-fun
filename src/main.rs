@@ -14,6 +14,20 @@ const PLOT_SCALE: f32 = 8.0;
 /// is enabled).
 const AUTO_UPDATE_TIME: f64 = 0.25;
 
+/// Empty space between left side of screen and text, in pixels.
+const LEFT_PADDING: f32 = 10.0;
+
+const HELP_TEXT: &'static str = r#"Help
+
+H - Toggle help
+SPACE - Update perceptron
+A - Toggle auto-update mode
+1 - Paint green datapoint (at mouse cursor)
+2 - Paint purple datapoint (at mouse cursor)
+X - Delete datapoint (at mouse cursor)
+C - Clear all datapoints
+"#;
+
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
     let mut datapoints = vec![
@@ -26,8 +40,10 @@ async fn main() {
 
     let plot = Plot::new(PLOT_SCALE);
     let mut auto_update = false;
+    let mut show_help = false;
     let mut last_frame_time = get_time();
     let mut time_to_auto_update = AUTO_UPDATE_TIME;
+    let help_lines: Vec<&'static str> = HELP_TEXT.split('\n').collect();
 
     loop {
         let now = get_time();
@@ -54,6 +70,10 @@ async fn main() {
 
         if modified_datapoints {
             perceptron = Perceptron::new(datapoints.clone());
+        }
+
+        if is_key_pressed(KeyCode::H) {
+            show_help = !show_help;
         }
 
         if is_key_pressed(KeyCode::A) {
@@ -86,7 +106,7 @@ async fn main() {
                 "Press space to update perceptron (press 'A' to auto-update)."
             }
         };
-        draw_text(status, 0.0, 30.0, 30.0, WHITE);
+        draw_text(status, LEFT_PADDING, 30.0, 30.0, WHITE);
 
         plot.draw_axes();
         plot.draw_circle(mouse.0 as f32, mouse.1 as f32, 0.75, DARKGRAY);
@@ -95,11 +115,23 @@ async fn main() {
 
         draw_text(
             &format!("Weights: {:?}", perceptron.weights()),
-            0.0,
+            LEFT_PADDING,
             screen_height() - 30.0,
             30.0,
             DARKBLUE,
         );
+
+        if show_help {
+            for (index, line) in help_lines.iter().enumerate() {
+                draw_text(
+                    line,
+                    LEFT_PADDING,
+                    90.0 + (index as f32 * 30.0),
+                    30.0,
+                    WHITE,
+                );
+            }
+        }
 
         next_frame().await;
 
