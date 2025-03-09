@@ -1,3 +1,5 @@
+use crate::plot::Plot;
+
 use super::vec3::Vec3;
 use macroquad::prelude::*;
 
@@ -96,23 +98,13 @@ impl Perceptron {
         }
     }
 
-    pub fn draw(&self, scale: f32) {
-        let center_x = screen_width() / 2.0;
-        let center_y = screen_height() / 2.0;
-
-        let screen_x = |x: f32| -> f32 { center_x + x * scale };
-        let screen_y = |y: f32| -> f32 { center_y + y * scale };
-
-        // Draw axes.
-        draw_line(0.0, center_y, screen_width(), center_y, 1.0, DARKGRAY);
-        draw_line(center_x, 0.0, center_x, screen_height(), 1.0, DARKGRAY);
-
+    pub fn draw(&self, plot: &Plot) {
         // Draw datapoints.
         for (index, point) in self.datapoints.iter().enumerate() {
-            draw_circle(
-                screen_x(point.pos .0 as f32),
-                screen_y(point.pos .1 as f32),
-                scale / 2.0,
+            plot.draw_circle(
+                point.pos .0 as f32,
+                point.pos .1 as f32,
+                0.5,
                 self.get_point_color(point, index),
             );
         }
@@ -129,12 +121,11 @@ impl Perceptron {
         let line = get_weight_line(&self.weights);
 
         if let Some((x1, y1, x2, y2)) = line {
-            draw_line(
-                screen_x(x1),
-                screen_y(y1),
-                screen_x(x2),
-                screen_y(y2),
-                1.0,
+            plot.draw_line(
+                x1,
+                y1,
+                x2,
+                y2,
                 BLUE,
             );
         }

@@ -1,9 +1,11 @@
 use macroquad::prelude::*;
 
 use perceptron::{Datapoint, Perceptron};
+use plot::Plot;
 
 mod perceptron;
 mod vec3;
+mod plot;
 
 #[macroquad::main("Perceptron Fun")]
 async fn main() {
@@ -18,6 +20,7 @@ async fn main() {
 
     const SCALE: f32 = 8.0;
 
+    let plot = Plot::new(SCALE);
     let mut auto_update = false;
 
     loop {
@@ -42,7 +45,8 @@ async fn main() {
         };
         draw_text(status, 0.0, 30.0, 30.0, WHITE);
 
-        perceptron.draw(SCALE);
+        plot.draw_axes();
+        perceptron.draw(&plot);
         next_frame().await;
 
         if is_key_pressed(KeyCode::Escape) {
