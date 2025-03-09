@@ -36,7 +36,7 @@ async fn main() {
         Datapoint::new((-2, 1), 1),
         Datapoint::new((-1, -3), -1),
     ];
-    let mut perceptron = Perceptron::new(datapoints.clone());
+    let mut perceptron = Perceptron::new(datapoints.clone(), Default::default());
 
     let plot = Plot::new(PLOT_SCALE);
     let mut auto_update = false;
@@ -69,7 +69,7 @@ async fn main() {
         };
 
         if modified_datapoints {
-            perceptron = Perceptron::new(datapoints.clone());
+            perceptron = Perceptron::new(datapoints.clone(), perceptron.weights());
         }
 
         if is_key_pressed(KeyCode::H) {

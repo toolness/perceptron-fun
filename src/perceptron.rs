@@ -31,10 +31,10 @@ pub struct Perceptron {
 }
 
 impl Perceptron {
-    pub fn new(datapoints: Vec<Datapoint>) -> Self {
+    pub fn new(datapoints: Vec<Datapoint>, weights: (i32, i32, i32)) -> Self {
         Perceptron {
             datapoints,
-            weights: Default::default(),
+            weights: Vec3(weights.0 as f64, weights.1 as f64, weights.2 as f64),
             curr_index: 0,
             updates_this_generation: 0,
             last_update_index: None,
