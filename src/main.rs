@@ -10,9 +10,13 @@ mod vec3;
 /// Each point on the plot is scaled by this many screen pixels.
 const PLOT_SCALE: f32 = 8.0;
 
-/// Time in seconds between perceptron auto-updates (when auto-updating
+/// Max time in ms between perceptron auto-updates (when auto-updating
 /// is enabled).
-const AUTO_UPDATE_TIME: f64 = 0.25;
+const MAX_AUTO_UPDATE_TIME: i32 = 250;
+
+/// Amount to increment/decrement auto-update, in ms, when user presses
+/// keys to do so.
+const AUTO_UPDATE_INCREMENT: i32 = 25;
 
 /// Empty space between left side of screen and text, in pixels.
 const LEFT_PADDING: f32 = 10.0;
@@ -22,6 +26,8 @@ const HELP_TEXT: &'static str = r#"Help
 H - Toggle help
 SPACE - Update perceptron
 A - Toggle auto-update mode
+[ - Decrease auto-update speed
+] - Increase auto-update speed
 1 - Paint green datapoint (at mouse cursor)
 2 - Paint purple datapoint (at mouse cursor)
 X - Delete datapoint (at mouse cursor)
@@ -41,10 +47,11 @@ async fn main() {
     let mut perceptron = Perceptron::new(datapoints.clone(), Default::default());
 
     let plot = Plot::new(PLOT_SCALE);
+    let mut auto_update_time = MAX_AUTO_UPDATE_TIME;
     let mut auto_update = false;
     let mut show_help = false;
     let mut last_frame_time = get_time();
-    let mut time_to_auto_update = AUTO_UPDATE_TIME;
+    let mut time_to_auto_update = MAX_AUTO_UPDATE_TIME as f64 / 1000.0;
     let help_lines: Vec<&'static str> = HELP_TEXT.split('\n').collect();
 
     loop {
@@ -85,10 +92,21 @@ async fn main() {
             time_to_auto_update = 0.0;
         }
 
+        if is_key_pressed(KeyCode::LeftBracket) {
+            // The reason we store auto-update numbers as integers is so we can use std::cmp
+            // functions, as floats aren't fully-ordered.
+            auto_update_time = std::cmp::min(
+                auto_update_time + AUTO_UPDATE_INCREMENT,
+                MAX_AUTO_UPDATE_TIME,
+            );
+        } else if is_key_pressed(KeyCode::RightBracket) {
+            auto_update_time = std::cmp::max(auto_update_time - AUTO_UPDATE_INCREMENT, 0);
+        }
+
         let should_update = if auto_update {
             time_to_auto_update -= delta_time;
             if time_to_auto_update <= 0.0 {
-                time_to_auto_update = AUTO_UPDATE_TIME;
+                time_to_auto_update = auto_update_time as f64 / 1000.0;
                 true
             } else {
                 false
