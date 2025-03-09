@@ -19,11 +19,11 @@ async fn main() {
     loop {
         clear_background(BLACK);
 
-        if is_key_pressed(KeyCode::Tab) {
+        if is_key_pressed(KeyCode::Space) {
             perceptron.update();
         }
 
-        draw_text("Press tab to update perceptron.", 0.0, 30.0, 30.0, WHITE);
+        draw_text("Press space to update perceptron.", 0.0, 30.0, 30.0, WHITE);
 
         perceptron.draw();
         next_frame().await;
