@@ -126,30 +126,7 @@ impl Perceptron {
         );
 
         // Draw weights, as a line dividing the space in half.
-        let line: Option<(f32, f32, f32, f32)>;
-
-        if self.weights.2 != 0.0 {
-            let f = |x: f32| -> f32 {
-                // Derived by solving for `y` with `0 = w1 * x + w2 * y + w0`, since
-                // the line is defined as all (x, y) such that the weighted sum with
-                // bias is zero.
-                ((-self.weights.0 - self.weights.1 * x as f64) / self.weights.2) as f32
-            };
-            let x1 = -1000.0;
-            let y1 = f(x1);
-            let x2 = 1000.0;
-            let y2 = f(x2);
-            line = Some((x1, y1, x2, y2));
-        } else if self.weights.1 != 0.0 {
-            // Derived similar to the previous case, but since we know `w2` is
-            // zero, we can remove that entire term and solve for `x`.
-            let x = (-self.weights.0 / self.weights.1) as f32;
-            line = Some((x, -1000.0, x, 1000.0))
-        } else {
-            // The weights represent a directionless vector, there's no line
-            // to draw.
-            line = None
-        }
+        let line = get_weight_line(&self.weights);
 
         if let Some((x1, y1, x2, y2)) = line {
             draw_line(
@@ -161,5 +138,38 @@ impl Perceptron {
                 BLUE,
             );
         }
+    }
+}
+
+/// Returns the geometric representation the given weights
+/// as a line with coordinates (x1, y1, x2, y2).
+/// 
+/// If the weights don't represent a vector, returns None.
+/// 
+/// Technically, this is actually the line *perpendicular*
+/// to the weight vector, but conceptually it's the line
+/// that divides the space in half.
+fn get_weight_line(weights: &Vec3) -> Option<(f32, f32, f32, f32)> {
+    if weights.2 != 0.0 {
+        let f = |x: f32| -> f32 {
+            // Derived by solving for `y` with `0 = w1 * x + w2 * y + w0`, since
+            // the line is defined as all (x, y) such that the weighted sum with
+            // bias is zero.
+            ((-weights.0 - weights.1 * x as f64) / weights.2) as f32
+        };
+        let x1 = -1000.0;
+        let y1 = f(x1);
+        let x2 = 1000.0;
+        let y2 = f(x2);
+        Some((x1, y1, x2, y2))
+    } else if weights.1 != 0.0 {
+        // Derived similar to the previous case, but since we know `w2` is
+        // zero, we can remove that entire term and solve for `x`.
+        let x = (-weights.0 / weights.1) as f32;
+        Some((x, -1000.0, x, 1000.0))
+    } else {
+        // The weights represent a directionless vector, there's no line
+        // to draw.
+        None
     }
 }
