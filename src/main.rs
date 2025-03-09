@@ -36,6 +36,7 @@ async fn main() {
         Datapoint::new((2, -1), 1),
         Datapoint::new((-2, 1), 1),
         Datapoint::new((-1, -3), -1),
+        Datapoint::new((47, -23), -1),
     ];
     let mut perceptron = Perceptron::new(datapoints.clone(), Default::default());
 
@@ -160,15 +161,18 @@ fn modify_datapoint(
     if let Some(label) = label {
         if let Some(dp) = datapoints.iter_mut().find(|dp| dp.pos == point) {
             if dp.label != label {
+                println!("Changing label of {point:?} to {label}.");
                 dp.label = label;
                 return true;
             }
         } else {
+            println!("Adding datapoint at {point:?} with label {label}.");
             datapoints.push(Datapoint::new(point, label));
             return true;
         }
     } else {
         if let Some(pos) = datapoints.iter().position(|dp| dp.pos == point) {
+            println!("Removing datapoint at {point:?}.");
             datapoints.remove(pos);
             return true;
         }
