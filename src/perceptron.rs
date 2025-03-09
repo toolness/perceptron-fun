@@ -99,8 +99,17 @@ impl Perceptron {
         }
     }
 
-    pub fn weights(&self) -> &Vec3 {
-        &self.weights
+    /// Return the weights.
+    ///
+    /// Note that due to the nature of the learning algorithm and the fact that
+    /// all data points are integers, this means that the weights will always
+    /// be integers.
+    pub fn weights(&self) -> (i32, i32, i32) {
+        (
+            self.weights.0 as i32,
+            self.weights.1 as i32,
+            self.weights.2 as i32,
+        )
     }
 
     pub fn draw(&self, plot: &Plot) {
