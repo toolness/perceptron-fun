@@ -17,6 +17,8 @@ pub struct Perceptron {
     weights: Vec3,
     /// The current index in `datapoints` that we're looking at next.
     curr_index: usize,
+    /// The index in `datapoints` that caused the most recent weight update.
+    last_update_index: Option<usize>,
     /// How many weight updates have been made in this generation of
     /// updates. A generation is an iteration through all the datapoints.
     updates_this_generation: usize,
@@ -32,6 +34,7 @@ impl Perceptron {
             weights: Default::default(),
             curr_index: 0,
             updates_this_generation: 0,
+            last_update_index: None,
             has_converged: false
         }
     }
@@ -53,12 +56,14 @@ impl Perceptron {
                     let x = Vec3(1.0, point.pos .0 as f64, point.pos .1 as f64);
                     let y = point.label as f64;
                     let w_dot_x = self.weights.dot(&x);
-                    self.curr_index += 1;
                     if y * w_dot_x <= 0.0 {
                         self.weights += y * x;
                         self.updates_this_generation += 1;
+                        self.last_update_index = Some(self.curr_index);
+                        self.curr_index += 1;
                         return;
                     }
+                    self.curr_index += 1;
                 },
                 None => {
                     if self.updates_this_generation == 0 {
@@ -70,6 +75,23 @@ impl Perceptron {
                     }
                     return;
                 }
+            }
+        }
+    }
+
+    fn get_point_color(&self, point: &Datapoint, index: usize) -> Color {
+        let is_last_update = !self.has_converged && self.last_update_index == Some(index);
+        if point.label <= 0 {
+            if is_last_update {
+                PURPLE
+            } else {
+                DARKPURPLE
+            }
+        } else {
+            if is_last_update {
+                GREEN
+            } else {
+                DARKGREEN
             }
         }
     }
@@ -86,12 +108,12 @@ impl Perceptron {
         draw_line(center_x, 0.0, center_x, screen_height(), 1.0, DARKGRAY);
 
         // Draw datapoints.
-        for point in &self.datapoints {
+        for (index, point) in self.datapoints.iter().enumerate() {
             draw_circle(
                 screen_x(point.pos .0 as f32),
                 screen_y(point.pos .1 as f32),
                 scale / 2.0,
-                if point.label <= 0 { RED } else { GREEN },
+                self.get_point_color(point, index),
             );
         }
 
