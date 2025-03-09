@@ -27,3 +27,7 @@ cargo run
 Once the window opens, you can press `H` for help.
 
 [Why Machines Learn]: http://anilananthaswamy.com/why-machines-learn
+
+## License
+
+Everything in this repository is licensed under [CC0 1.0 Universal](./LICENSE.md) (public domain).
