@@ -5,6 +5,8 @@ Frank Rosenblatt in 1958.
 The program uses the algorithm described in page 51 of [Why Machines Learn][]
 by Anil Ananthaswamy.
 
+You can access the web version at [toolness.github.io/perceptron-fun/](https://toolness.github.io/perceptron-fun/).
+
 ## Example
 
 Below is a screencast of the program converging upon a solution.
