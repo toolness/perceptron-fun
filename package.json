@@ -1,0 +1,14 @@
+{
+  "name": "perceptron-fun",
+  "version": "1.0.0",
+  "description": "This is a simple interactive lab that lets you play around with the Perceptron, a remarkably elegant neural network invented by Frank Rosenblatt in 1958.",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "sh build-wasm.sh && gh-pages -d dist"
+  },
+  "author": "Atul Varma <varmaa@gmail.com>",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "gh-pages": "^6.3.0"
+  }
+}
