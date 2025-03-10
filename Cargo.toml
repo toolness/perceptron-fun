@@ -2,6 +2,7 @@
 name = "perceptron-fun"
 version = "0.1.0"
 edition = "2021"
+authors = ["Atul Varma <varmaa@gmail.com>"]
 
 [dependencies]
 macroquad = "0.4.13"

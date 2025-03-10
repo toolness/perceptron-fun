@@ -1,1 +1,3 @@
 /target
+/dist/perceptron-fun.wasm
+/node_modules

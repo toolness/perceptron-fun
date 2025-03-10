@@ -33,8 +33,21 @@ cargo run
 
 Once the window opens, you can press `H` for help.
 
-[Why Machines Learn]: http://anilananthaswamy.com/why-machines-learn
+## Web version
+
+To build the web version, run:
+
+```
+sh build-wasm.sh
+```
+
+Then run a web server (e.g. `basic-http-server`, installable via `cargo`) in the
+root of the `dist` directory and visit it.
+
+You can deploy the web version with `npm run deploy`.
 
 ## License
 
 Everything in this repository is licensed under [CC0 1.0 Universal](./LICENSE.md) (public domain).
+
+[Why Machines Learn]: http://anilananthaswamy.com/why-machines-learn
